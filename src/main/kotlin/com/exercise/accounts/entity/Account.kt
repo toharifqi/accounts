@@ -1,10 +1,7 @@
 package com.exercise.accounts.entity
 
 import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import org.hibernate.annotations.GenericGenerator
 import java.time.LocalDateTime
 
 @Entity
