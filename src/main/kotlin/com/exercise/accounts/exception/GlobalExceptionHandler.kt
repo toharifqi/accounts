@@ -10,6 +10,21 @@ import java.time.LocalDateTime
 
 @ControllerAdvice
 class GlobalExceptionHandler {
+
+    @ExceptionHandler(Exception::class)
+    fun handleGlobalException(
+        exception: Exception,
+        webRequest: WebRequest,
+    ): ResponseEntity<ErrorResponse> {
+        val errorResponse = ErrorResponse(
+            webRequest.getDescription(false),
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            exception.message ?: "",
+            LocalDateTime.now()
+        )
+
+        return ResponseEntity(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR)
+    }
     
     @ExceptionHandler(CustomerAlreadyExistException::class)
     fun handleCustomerAlreadyExistException(
