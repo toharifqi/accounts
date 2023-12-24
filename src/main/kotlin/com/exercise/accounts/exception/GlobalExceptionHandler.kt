@@ -25,4 +25,19 @@ class GlobalExceptionHandler {
         
         return ResponseEntity(errorResponse, HttpStatus.BAD_REQUEST)
     }
+
+    @ExceptionHandler(ResourceNotFoundException::class)
+    fun resourceNotFoundExceptionException(
+        exception: ResourceNotFoundException,
+        webRequest: WebRequest,
+    ): ResponseEntity<ErrorResponse> {
+        val errorResponse = ErrorResponse(
+            webRequest.getDescription(false),
+            HttpStatus.NOT_FOUND,
+            exception.responseMessage,
+            LocalDateTime.now()
+        )
+
+        return ResponseEntity(errorResponse, HttpStatus.NOT_FOUND)
+    }
 }
