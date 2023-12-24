@@ -20,6 +20,8 @@ interface AccountService {
     fun fetchAccount(mobileNumber: String): AccountDetails
     
     fun updateAccountDetails(accountDetails: AccountDetails): Boolean
+    
+    fun deleteAccount(mobileNumber: String): Boolean
 }
 
 @Service
@@ -61,8 +63,6 @@ class AccountServiceImpl(
     }
 
     override fun updateAccountDetails(accountDetails: AccountDetails): Boolean {
-        var isUpdated = false
-
         val account = accountDetails.account
         val updatedAccount = accountRepository.findById(account.accountNumber).orElseThrow {
             ResourceNotFoundException("Account", "accountNumber", account.accountNumber.toString())
@@ -83,10 +83,19 @@ class AccountServiceImpl(
             updatedAt = LocalDateTime.now()
         )
         customerRepository.save(updatedCustomer)
-
-        isUpdated = true
         
-        return isUpdated
+        return true
+    }
+
+    override fun deleteAccount(mobileNumber: String): Boolean {
+        val customerEntity = customerRepository.findByMobileNumber(mobileNumber).orElseThrow {
+            ResourceNotFoundException("Customer", "mobileNumber", mobileNumber)
+        }
+        
+        accountRepository.deleteByCustomerId(customerEntity.customerId)
+        customerRepository.deleteById(customerEntity.customerId)
+        
+        return true
     }
 
     private fun createNewAccount(customerEntity: CustomerEntity): AccountEntity {
