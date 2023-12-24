@@ -18,6 +18,8 @@ interface AccountService {
     fun createAccount(customer: Customer)
 
     fun fetchAccount(mobileNumber: String): AccountDetails
+    
+    fun updateAccountDetails(accountDetails: AccountDetails): Boolean
 }
 
 @Service
@@ -56,6 +58,35 @@ class AccountServiceImpl(
             mobileNumber = customerEntity.mobileNumber,
             account = Account(accountEntity)
         )
+    }
+
+    override fun updateAccountDetails(accountDetails: AccountDetails): Boolean {
+        var isUpdated = false
+
+        val account = accountDetails.account
+        val updatedAccount = accountRepository.findById(account.accountNumber).orElseThrow {
+            ResourceNotFoundException("Account", "accountNumber", account.accountNumber.toString())
+        }.copy(
+            accountNumber = account.accountNumber,
+            accountType = account.accountType,
+            branchAddress = account.branchAddress,
+            updatedAt = LocalDateTime.now()
+        )
+        accountRepository.save(updatedAccount)
+        
+        val updatedCustomer = customerRepository.findById(updatedAccount.customerId).orElseThrow {
+            ResourceNotFoundException("Customer", "customerId", updatedAccount.customerId.toString())
+        }.copy(
+            name = accountDetails.name,
+            email = accountDetails.email,
+            mobileNumber = accountDetails.mobileNumber,
+            updatedAt = LocalDateTime.now()
+        )
+        customerRepository.save(updatedCustomer)
+
+        isUpdated = true
+        
+        return isUpdated
     }
 
     private fun createNewAccount(customerEntity: CustomerEntity): AccountEntity {

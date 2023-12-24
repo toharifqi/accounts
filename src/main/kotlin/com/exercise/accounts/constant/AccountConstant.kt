@@ -10,4 +10,6 @@ object AccountConstant {
     const val STATUS_417 = "417"
     const val MESSAGE_417_UPDATE = "Update operation failed. Please try again or contact Dev team"
     const val MESSAGE_417_DELETE = "Delete operation failed. Please try again or contact Dev team"
+    const val STATUS_500: String = "500"
+    const val MESSAGE_500: String = "An error occurred. Please try again or contact Dev team"
 }
