@@ -7,14 +7,14 @@ import java.time.LocalDateTime
 @MappedSuperclass
 interface BaseEntity {
     @get:Column(updatable = false)
-    val createdAt: LocalDateTime 
+    var createdAt: LocalDateTime? 
 
     @get:Column(updatable = false)
-    val createdBy: String
+    var createdBy: String?
 
     @get:Column(insertable = false)
-    val updatedAt: LocalDateTime?
+    var updatedAt: LocalDateTime?
 
     @get:Column(insertable = false)
-    val updatedBy: String?
+    var updatedBy: String?
 }

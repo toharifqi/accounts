@@ -30,11 +30,7 @@ class AccountServiceImpl(
     val customerRepository: CustomerRepository,
 ) : AccountService {
     override fun createAccount(customer: Customer) {
-        val customerEntity = CustomerEntity(
-            customer = customer,
-            createdAt = LocalDateTime.now(),
-            createdBy = "Anonymous",
-        )
+        val customerEntity = CustomerEntity(customer)
         val optionalCustomer = customerRepository.findByMobileNumber(customerEntity.mobileNumber)
 
         if (optionalCustomer.isPresent) {
@@ -105,11 +101,7 @@ class AccountServiceImpl(
             customerId = customerEntity.customerId,
             accountNumber = randomAccountNumber,
             accountType = AccountConstant.SAVINGS,
-            branchAddress = AccountConstant.ADDRESS,
-            createdAt = LocalDateTime.now(),
-            createdBy = "Anonymous",
-            updatedAt = null,
-            updatedBy = null,
+            branchAddress = AccountConstant.ADDRESS
         )
 
         return accountEntity
