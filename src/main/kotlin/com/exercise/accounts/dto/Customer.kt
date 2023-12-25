@@ -15,7 +15,7 @@ data class Customer(
     @field:Email(message = "Email address should be valid value")
     val email: String,
     
-    @field:Pattern(regexp = "(^$|[0-9]{12})", message = "Mobile number must be 12 digits")
+    @field:Pattern(regexp = "(^$|[0-9]{12})", message = "Mobile number must be 12 digits of numbers")
     val mobileNumber: String,
 ) {
     constructor(customerEntity: CustomerEntity): this(

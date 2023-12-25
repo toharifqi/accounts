@@ -43,7 +43,7 @@ class AccountController(
     @GetMapping("/fetch")
     fun fetchAccountDetails(
         @RequestParam
-        @Pattern(regexp = "(^$|[0-9]{12})", message = "Mobile number must be 12 digits")
+        @Pattern(regexp = "(^$|[0-9]{12})", message = "Mobile number must be 12 digits of numbers")
         mobileNumber: String
     ): ResponseEntity<AccountDetails> {
         val accountDetails = accountService.fetchAccount(mobileNumber)
@@ -77,7 +77,7 @@ class AccountController(
     @DeleteMapping("/delete")
     fun deleteAccountDetails(
         @RequestParam
-        @Pattern(regexp = "(^$|[0-9]{12})", message = "Mobile number must be 12 digits")
+        @Pattern(regexp = "(^$|[0-9]{12})", message = "Mobile number must be 12 digits of numbers")
         mobileNumber: String
     ): ResponseEntity<Response> {
         val isDeleted = accountService.deleteAccount(mobileNumber)

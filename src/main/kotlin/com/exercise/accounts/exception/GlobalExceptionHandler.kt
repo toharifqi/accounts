@@ -1,6 +1,7 @@
 package com.exercise.accounts.exception
 
 import com.exercise.accounts.dto.ErrorResponse
+import org.springframework.context.support.DefaultMessageSourceResolvable
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
@@ -23,11 +24,13 @@ class GlobalExceptionHandler: ResponseEntityExceptionHandler() {
         request: WebRequest
     ): ResponseEntity<Any>? {
         val validationErrors = mutableMapOf<String, String>()
+        validationErrors["errorCode"] = HttpStatus.INTERNAL_SERVER_ERROR.toString()
         val errorlist = ex.bindingResult.allErrors
 
-        errorlist.forEach {
-            validationErrors["${it.arguments}"] = it.defaultMessage.toString()
-        }
+        errorlist.forEach { objectError ->
+            val fieldName = (objectError.arguments?.get(0) as DefaultMessageSourceResolvable).code ?: ""
+            validationErrors[fieldName] = objectError.defaultMessage.toString()
+        } 
 
         return ResponseEntity(validationErrors, HttpStatus.INTERNAL_SERVER_ERROR)
     }
