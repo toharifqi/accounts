@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.core.env.Environment
 
 @Tag(
     name = "CRUD REST APIs for Account in X Bank",
@@ -37,6 +38,7 @@ import org.springframework.beans.factory.annotation.Value
 @Validated
 class AccountController(
     private val accountService: AccountService,
+    private val environment: Environment
 ) {
     
     @Value("\${build.version}")
@@ -219,5 +221,27 @@ class AccountController(
     @GetMapping("/build-info")
     fun getBuildInfo(): ResponseEntity<String> {
         return ResponseEntity.status(HttpStatus.OK).body(buildVersion)
+    }
+
+    @Operation(
+        summary = "Get Java version",
+        description = "Get Java version that is installed into accounts microservice"
+    )
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "HTTP Status OK"
+        ),
+        ApiResponse(
+            responseCode = "500",
+            description = "HTTP Status Internal Server Error",
+            content = [Content(
+                schema = Schema(implementation = ErrorResponse::class)
+            )]
+        )
+    )
+    @GetMapping("/java-version")
+    fun getJavaVersion(): ResponseEntity<String> {
+        return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("JAVA_HOME") ?: "null, need permission")
     }
 }
