@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import org.springframework.beans.factory.annotation.Value
 
 @Tag(
     name = "CRUD REST APIs for Account in X Bank",
@@ -37,6 +38,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse
 class AccountController(
     private val accountService: AccountService,
 ) {
+    
+    @Value("\${build.version}")
+    val buildVersion: String? = null
 
     @Operation(
         summary = "Create Account REST API",
@@ -193,5 +197,27 @@ class AccountController(
                     )
                 )
         }
+    }
+
+    @Operation(
+        summary = "Get Build Information",
+        description = "Get Build information that is deployed into accounts microservice"
+    )
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "HTTP Status OK"
+        ),
+        ApiResponse(
+            responseCode = "500",
+            description = "HTTP Status Internal Server Error",
+            content = [Content(
+                schema = Schema(implementation = ErrorResponse::class)
+            )]
+        )
+    )
+    @GetMapping("/build-info")
+    fun getBuildInfo(): ResponseEntity<String> {
+        return ResponseEntity.status(HttpStatus.OK).body(buildVersion)
     }
 }
