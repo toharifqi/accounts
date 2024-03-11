@@ -2,6 +2,7 @@ package com.exercise.accounts.controller
 
 import com.exercise.accounts.constant.AccountConstant
 import com.exercise.accounts.dto.AccountDetails
+import com.exercise.accounts.dto.AccountsContactInfo
 import com.exercise.accounts.dto.Customer
 import com.exercise.accounts.dto.ErrorResponse
 import com.exercise.accounts.dto.Response
@@ -38,7 +39,8 @@ import org.springframework.core.env.Environment
 @Validated
 class AccountController(
     private val accountService: AccountService,
-    private val environment: Environment
+    private val environment: Environment,
+    private val accountsContactInfo: AccountsContactInfo
 ) {
     
     @Value("\${build.version}")
@@ -243,5 +245,27 @@ class AccountController(
     @GetMapping("/java-version")
     fun getJavaVersion(): ResponseEntity<String> {
         return ResponseEntity.status(HttpStatus.OK).body(environment.getProperty("JAVA_HOME") ?: "null, need permission")
+    }
+
+    @Operation(
+        summary = "Get Contact Info",
+        description = "Contact Info details that can be reached out in case of any issues"
+    )
+    @ApiResponses(
+        ApiResponse(
+            responseCode = "200",
+            description = "HTTP Status OK"
+        ),
+        ApiResponse(
+            responseCode = "500",
+            description = "HTTP Status Internal Server Error",
+            content = [Content(
+                schema = Schema(implementation = ErrorResponse::class)
+            )]
+        )
+    )
+    @GetMapping("/contact-info")
+    fun getContactInfo(): ResponseEntity<AccountsContactInfo> {
+        return ResponseEntity.status(HttpStatus.OK).body(accountsContactInfo)
     }
 }
