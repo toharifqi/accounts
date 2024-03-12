@@ -14,12 +14,18 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-    
+  config:
+    import: 
+      - "application_staging.yaml"
+      - "application_prod.yaml"
+  profiles:
+    active: "local"
+
 build:
-  version: "1.0"
+  version: "3.0"
   
 accounts:
-  message: "Welcome to XBank accounts related local APIs "
+  message: "Welcome to XBank accounts related local APIs"
   contactDetails:
     name: "John Doe - Developer"
     email: "john@xbank.com"
