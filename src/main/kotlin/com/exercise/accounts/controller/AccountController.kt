@@ -2,7 +2,7 @@ package com.exercise.accounts.controller
 
 import com.exercise.accounts.constant.AccountConstant
 import com.exercise.accounts.dto.AccountDetails
-import com.exercise.accounts.dto.AccountsContactInfo
+import com.exercise.accounts.dto.ProjectContactInfo
 import com.exercise.accounts.dto.Customer
 import com.exercise.accounts.dto.ErrorResponse
 import com.exercise.accounts.dto.Response
@@ -40,7 +40,7 @@ import org.springframework.core.env.Environment
 class AccountController(
     private val accountService: AccountService,
     private val environment: Environment,
-    private val accountsContactInfo: AccountsContactInfo
+    private val projectContactInfo: ProjectContactInfo
 ) {
     
     @Value("\${build.version}")
@@ -265,7 +265,7 @@ class AccountController(
         )
     )
     @GetMapping("/contact-info")
-    fun getContactInfo(): ResponseEntity<AccountsContactInfo> {
-        return ResponseEntity.status(HttpStatus.OK).body(accountsContactInfo)
+    fun getContactInfo(): ResponseEntity<ProjectContactInfo> {
+        return ResponseEntity.status(HttpStatus.OK).body(projectContactInfo)
     }
 }
