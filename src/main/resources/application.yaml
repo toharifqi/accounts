@@ -16,8 +16,8 @@ spring:
     show-sql: true
   config:
     import: 
-      - "application_staging.yaml"
-      - "application_prod.yaml"
+      - "application-staging.yaml"
+      - "application-prod.yaml"
   profiles:
     active: "local"
 
